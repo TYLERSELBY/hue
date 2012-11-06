@@ -1,0 +1,12 @@
+http://www.nerdblog.com/2012/10/a-day-with-philips-hue.html
+
+http POST http://10.0.1.11/api username=secret devicetype=sencha
+
+iPhone 04:F7:E4:16:75:A3
+
+State: iterate all bulbs and their state, set back the previous state when setting on/off
+Timed: fade on to full at 7am.  off at 7:30, on at 3:30, dim at 10, off at 11
+Network: On when iPhone is detected, off when gone
+Notification: Pulse on event (Growl, Mail, etc).  Color based on value (stock, weather, site activity, network usage)
+
+
