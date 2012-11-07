@@ -1,8 +1,7 @@
 #!/usr/bin/python
-import requests
 from time import sleep
-import json
 import ConfigParser
+from light import Light
 
 config = ConfigParser.RawConfigParser()
 config.read('hue.cfg')
@@ -12,17 +11,16 @@ secret = config.get('hue', 'secret')
 light = config.get('hue', 'light')
 numlights = int(config.get('hue', 'numlights'))
 
-on = json.dumps({'on': True})
-off = json.dumps({'on': False})
-lights = [x for x in range(1,numlights+1)]
-
-if light.strip() != 'all':
-    lights = [light]
+if light.strip() == 'all':
+    lights = [Light(ip, secret, x) for x in range(1, numlights+1)]
+else:
+    lights = [Light(ip, secret, light)]
 
 while 1:
     for light in lights:
-        url = 'http://%s/api/%s/lights/%s/state' % (ip, secret, light)
-        r = requests.put(url, data=on)
+        #print "on", light.number()
+        light.on()
         sleep(1)
-        r = requests.put(url, data=off)
+        #print "off", light.number()
+        light.off()
         sleep(1)
