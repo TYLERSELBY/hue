@@ -25,4 +25,6 @@ class Light:
         url = 'http://%s/api/%s/lights/%s/state' % (self.ip, self.secret, self.lightnum)
         r = requests.put(url, data=body)
 
+    def number(self):
+        return self.lightnum
 
