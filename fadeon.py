@@ -3,6 +3,7 @@ import requests
 from time import sleep
 import json
 import ConfigParser
+from light import Light
 
 
 config = ConfigParser.RawConfigParser()
@@ -15,10 +16,11 @@ numlights = int(config.get('hue', 'numlights'))
 
 duration=600
 max_bri=255
-lights = [x for x in range(1,numlights+1)]
 
-if light.strip() != 'all':
-    lights = [light]
+if light.strip() == 'all':
+    lights = [Light(ip, secret, x) for x in range(1, numlights+1)]
+else:
+    lights = [Light(ip, secret, light)]
 
 interval = float(duration)/max_bri
 
@@ -27,17 +29,12 @@ if ( (interval / len(lights)) < .5):
     interval = 0.5
 
 #turn defined lights on but dark
-on = json.dumps({'on': True, 'bri': 0})
 for light in lights:
-    url = 'http://%s/api/%s/lights/%s/state' % (ip, secret, light)
-    r = requests.put(url, data=on)
+    light.brightness(1)
+    light.on()
 
-for i in range(0,max_bri):
-    level = json.dumps({'bri': i})
+for i in range(1, max_bri):
     for light in lights:
-        url = 'http://%s/api/%s/lights/%s/state' % (ip, secret, light)
-        r = requests.put(url, data=level)
-        if(r.status_code != 200):
-            print r.status_code
+        light.brightness(i)
         sleep(interval)
-        print "Light %s to level %s" % (light, level)
+        print "Light %s to level %s" % (light.number(), i)
