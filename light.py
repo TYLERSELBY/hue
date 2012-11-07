@@ -9,11 +9,14 @@ class Light:
         self.secret = secret
         self.lightnum = lightnum
 
-    def brightness(self, bri):
-        if(bri == 'full'): bri = 255
-        bri = json.dumps({'bri': bri, 'on': True})
+    def brightness(self, i):
+        if(i == 'full'):
+            i = 255
+        if(i > 255):
+            i = 255
+        bri = json.dumps({'bri': i, 'on': True})
         url = 'http://%s/api/%s/lights/%s/state' % (self.ip, self.secret, self.lightnum)
-        r = requests.put(url, data=self.bri)
+        r = requests.put(url, data=bri)
 
     def on(self):
         body = json.dumps({'on': True})
