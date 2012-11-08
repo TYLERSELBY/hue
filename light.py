@@ -31,3 +31,8 @@ class Light:
     def number(self):
         return self.lightnum
 
+    def getstate(self):
+        url = 'http://%s/api/%s/lights/%s/' % (self.ip, self.secret, self.lightnum)
+        r = requests.get(url)
+        return json.loads(r.content)['state']
+
