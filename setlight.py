@@ -14,14 +14,19 @@ secret = config.get('hue', 'secret')
 numlights = int(config.get('hue', 'numlights'))
 
 def usage():
-    print "./setlight.py (all|light#) (full|[0-255])"
+    print "./setlight.py (all|light#) (full|[0-255]) [relax|reading|concentration|energize]"
     sys.exit(0)
 
 if(len(sys.argv) < 2):
     usage()
 
 light = sys.argv[1]
+
 bri = sys.argv[2]
+
+if(len(sys.argv) > 2):
+    profile = sys.argv[3]
+
 
 if light.strip() == 'all':
     lights = [Light(ip, secret, x) for x in range(1, numlights+1)]
@@ -30,4 +35,7 @@ else:
 
 for light in lights:
     light.on()
-    light.brightness(bri)
+    if(profile):
+        getattr(light, profile)()
+    else:
+        light.brightness(bri)
