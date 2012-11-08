@@ -105,10 +105,14 @@ class DHCPMonitor:
                 for client in new:
                     if(self.hook['incoming'].has_key(client)):
                         self.hook['incoming'][client](client, 'incoming', users[client])
+                    if(self.hook['incoming'].has_key('*')):
+                        self.hook['incoming']['*'](client, 'incoming', users[client])
             if (old):
                 for client in old:
                     if(self.hook['outgoing'].has_key(client)):
                         self.hook['outgoing'][client](client, 'outgoing', users[client])
+                    if(self.hook['outgoing'].has_key('*')):
+                        self.hook['outgoing']['*'](client, 'outgoing', users[client])
 
 
             was_online = online

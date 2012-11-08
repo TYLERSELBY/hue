@@ -7,10 +7,13 @@ import ConfigParser
 light = None
 
 def basicprint(hwaddr, event, info):
-    if(event == 'incoming'):
-        print datetime.now(), info['dhcpClientID'], " has arrived"
-    elif(event == 'outgoing'):
-        print datetime.now(), info['dhcpClientID'], " has departed"
+    name = hwaddr
+    if (info.has_key('dhcpClientID') and info['dhcpClientID'] != ''):
+        name = info['dhcpClientID']
+    if (event == 'incoming'):
+        print "[%s] %s has %s" % (datetime.now(), name, 'arrived')
+    elif (event == 'outgoing'):
+        print "[%s] %s has %s" % (datetime.now(), name, 'departed')
 
 def togglelight(hwaddr, event, info):
     if(event == 'incoming'):
@@ -26,8 +29,8 @@ if __name__ == "__main__":
     light = Light(ip, secret, 2)
 
     d = DHCPMonitor(ip='10.0.1.1')
-    #iMac
-    #d.register('D8:30:62:4C:F6:2A','incoming', basicprint)
+    d.register('*','incoming', basicprint)
+    d.register('*','outgoing', basicprint)
     #iPhone
     d.register('04:F7:E4:16:75:A3','incoming', togglelight)
     d.register('04:F7:E4:16:75:A3','outgoing', togglelight)
