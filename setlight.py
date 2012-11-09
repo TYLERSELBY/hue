@@ -12,6 +12,7 @@ config.read('hue.cfg')
 ip = config.get('hue', 'ip')
 secret = config.get('hue', 'secret')
 numlights = int(config.get('hue', 'numlights'))
+profile = None
 
 def usage():
     print "./setlight.py (all|light#) (full|[0-255]) [relax|reading|concentration|energize]"
@@ -24,14 +25,14 @@ light = sys.argv[1]
 
 bri = sys.argv[2]
 
-if(len(sys.argv) > 2):
+if(len(sys.argv) > 3):
     profile = sys.argv[3]
 
 
 if light.strip() == 'all':
-    lights = [Light(ip, secret, x) for x in range(1, numlights+1)]
+    lights = [Light(ip, secret, x, True) for x in range(1, numlights+1)]
 else:
-    lights = [Light(ip, secret, light)]
+    lights = [Light(ip, secret, light, True)]
 
 for light in lights:
     light.on()
