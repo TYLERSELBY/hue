@@ -21,7 +21,7 @@ class Light:
             i = 254
         if(int(i) > 254):
             i = 254
-        bri = json.dumps({'bri': i, 'on': True})
+        bri = json.dumps({'bri': int(i), 'on': True})
         self.setstate(bri)
 
     def on(self):
