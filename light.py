@@ -4,13 +4,15 @@ from time import sleep
 import json
 
 class Light:
-    def __init__(self, ip, secret, lightnum):
+    def __init__(self, ip, secret, lightnum, debug=False):
         self.ip = ip
         self.secret = secret
         self.lightnum = lightnum
+        self.debug = debug
 
     def setstate(self, body):
-        print body
+        if(self.debug):
+            print "Send %s to light %s" % (body, self.lightnum)
         url = 'http://%s/api/%s/lights/%s/state' % (self.ip, self.secret, self.lightnum)
         r = requests.put(url, data=body)
 
