@@ -11,6 +11,8 @@ class Light:
         self.debug = debug
 
     def setstate(self, body):
+        if(type(body) != str):
+            body = json.dumps(body)
         if(self.debug):
             print "Send %s to light %s" % (body, self.lightnum)
         url = 'http://%s/api/%s/lights/%s/state' % (self.ip, self.secret, self.lightnum)
