@@ -23,7 +23,7 @@ else:
     x = 100
 
 if(len(sys.argv) > 3):
-    color = int(sys.argv[3])
+    color = sys.argv[3]
 else:
     color = None
 
@@ -41,6 +41,7 @@ while x > 0:
         state[light.number()] = light.getstate()
         #flash color
         if(color):
+            getattr(light, color)()
             pass
         #flash on/off
         else:
