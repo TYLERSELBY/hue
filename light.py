@@ -2,9 +2,19 @@
 import requests
 from time import sleep
 import json
+import ConfigParser
+import os
+
 
 class Light:
-    def __init__(self, ip, secret, lightnum, debug=False):
+    def __init__(self, ip='10.0.0.1', secret='', lightnum=1, debug=False):
+        config = ConfigParser.RawConfigParser()
+        if os.path.isfile('hue.cfg'):
+            config.read('hue.cfg')
+            ip = config.get('hue', 'ip')
+            secret = config.get('hue', 'secret')
+            lightnum = config.get('hue', 'light')
+
         self.ip = ip
         self.secret = secret
         self.lightnum = lightnum
