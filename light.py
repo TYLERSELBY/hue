@@ -7,17 +7,19 @@ import os
 
 
 class Light:
-    def __init__(self, ip='10.0.0.1', secret='', lightnum=1, debug=False):
-        config = ConfigParser.RawConfigParser()
+    def __init__(self, ip=None, secret=None, lightnum=None, debug=False):
+        #If a config is available, default to it
         if os.path.isfile('hue.cfg'):
+            config = ConfigParser.RawConfigParser()
             config.read('hue.cfg')
-            ip = config.get('hue', 'ip')
-            secret = config.get('hue', 'secret')
-            lightnum = config.get('hue', 'light')
+            self.ip = config.get('hue', 'ip')
+            self.secret = config.get('hue', 'secret')
+            self.lightnum = config.get('hue', 'light')
 
-        self.ip = ip
-        self.secret = secret
-        self.lightnum = lightnum
+        #Fill in if parameter was set
+        if(ip): self.ip = ip
+        if(secret): self.secret = secret
+        if(lightnum): self.lightnum = lightnum
         self.debug = debug
 
     def setstate(self, body):
