@@ -53,19 +53,19 @@ class Light:
         return json.loads(r.content)['state']
 
     def concentrate(self):
-        body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'effect': u'none', u'alert': u'none', u'xy': [0.5119, 0.4147], u'reachable': True, u'bri': 219, u'sat': 211, u'ct': 233})
+        body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'bri': 219, u'sat': 211, u'ct': 233})
         self.setstate(body)
 
     def energize(self):
-        body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'effect': u'none', u'alert': u'none', u'xy': [0.5119, 0.4147], u'reachable': True, u'bri': 203, u'sat': 211, u'ct': 156})
+        body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'bri': 203, u'sat': 211, u'ct': 156})
         self.setstate(body)
 
     def reading(self):
-        body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'effect': u'none', u'alert': u'none', u'xy': [0.5119, 0.4147], u'reachable': True, u'bri': 240, u'sat': 211, u'ct': 346})
+        body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'bri': 240, u'sat': 211, u'ct': 346})
         self.setstate(body)
 
     def relax(self):
-        body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'effect': u'none', u'alert': u'none', u'xy': [0.5119, 0.4147], u'reachable': True, u'bri': 144, u'sat': 211, u'ct': 467})
+        body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'bri': 144, u'sat': 211, u'ct': 467})
         self.setstate(body)
 
     def red(self):
@@ -77,3 +77,5 @@ class Light:
     def green(self):
         self.setstate({"on": True, "hue": 47103, "colormode": "xy", "xy": [0.3991, 0.4982]})
 
+    def uhwhite(self):
+        self.setstate({"on": true, "hue": 47103, "colormode": "xy", "xy": [0.3355, 0.3595]})
