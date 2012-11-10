@@ -12,6 +12,8 @@ secret = config.get('hue', 'secret')
 light = config.get('hue', 'light')
 numlights = int(config.get('hue', 'numlights'))
 
+print "%s <lightnum> <pulse count> <color>" % sys.argv[0]
+
 if(len(sys.argv) > 1):
     light = sys.argv[1]
 
@@ -20,17 +22,38 @@ if(len(sys.argv) > 2):
 else:
     x = 100
 
-if light.strip() == 'all':
-    lights = [Light(ip, secret, x) for x in range(1, numlights+1)]
+if(len(sys.argv) > 3):
+    color = int(sys.argv[3])
 else:
-    lights = [Light(ip, secret, light)]
+    color = None
+
+if light.strip() == 'all':
+    lights = [Light(ip, secret, x, True) for x in range(1, numlights+1)]
+else:
+    lights = [Light(ip, secret, light, True)]
+
+state = {}
 
 while x > 0:
     x = x - 1
+    #Set to alternate state
     for light in lights:
-        #print "on", light.number()
-        light.on()
+        state[light.number()] = light.getstate()
+        #flash color
+        if(color):
+            pass
+        #flash on/off
+        else:
+            if(state[light.number()]['on']):
+                light.off()
+            else:
+                light.on()
         sleep(1)
-        #print "off", light.number()
-        light.off()
+
+    #Set to original state
+    for light in lights:
+        light.setstate(state[light.number()])
         sleep(1)
+
+
+
