@@ -25,7 +25,7 @@ light = sys.argv[1]
 
 bri = sys.argv[2]
 
-if(len(sys.argv) > 3):
+if(len(sys.argv) > 2):
     profile = sys.argv[3]
 
 
