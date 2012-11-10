@@ -68,3 +68,12 @@ class Light:
         body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'effect': u'none', u'alert': u'none', u'xy': [0.5119, 0.4147], u'reachable': True, u'bri': 144, u'sat': 211, u'ct': 467})
         self.setstate(body)
 
+    def red(self):
+        self.setstate({"on": True, "hue": 836, "colormode": "xy", "xy": [0.6475, 0.3316]})
+
+    def blue(self):
+        self.setstate({"on": True, "hue": 47103, "colormode": "xy", "xy": [0.167, 0.04]})
+
+    def green(self):
+        self.setstate({"on": True, "hue": 47103, "colormode": "xy", "xy": [0.3991, 0.4982]})
+
