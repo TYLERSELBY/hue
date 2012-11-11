@@ -16,15 +16,12 @@ color = None
 
 print "%s <lightnum> <pulse count> <color>" % sys.argv[0]
 
-print sys.argv
 if(len(sys.argv) > 1):
     light = sys.argv[1]
 if(len(sys.argv) > 2):
     x = int(sys.argv[2])
 if(len(sys.argv) > 3):
     color = sys.argv[3]
-
-print light, x, color
 
 if light.strip() == 'all':
     lights = [Light(ip, secret, i, True) for i in range(1, numlights+1)]
