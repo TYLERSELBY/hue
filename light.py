@@ -21,6 +21,28 @@ class Light:
         if(secret): self.secret = secret
         if(lightnum): self.lightnum = lightnum
         self.debug = debug
+        if(not self.secret):
+            self.register()
+
+    def register(self):
+        secret = None
+        while not secret:
+            body = json.dumps({'username': 'bettseLight', 'devicetype': 'python'})
+            url = 'http://%s/api/' % (self.ip)
+            r = requests.post(url, data=body)
+            data = json.loads(r.content)[0]
+            if(data.has_key('success')):
+                secret = data['success']['username']
+                print "Key is %s" % secret
+            if(data.has_key('error')):
+                print "Please push the button on the Phlips Hue Hub"
+                sleep(0.5)
+        self.secret = secret
+        if os.path.isfile('hue.cfg'):
+            config = ConfigParser.RawConfigParser()
+            config.set('hue', 'secret', secret)
+            with open('hue.cfg', 'wb') as configfile:
+                config.write(configfile)
 
     def setstate(self, body):
         if(type(body) != str):
@@ -81,3 +103,4 @@ class Light:
 
     def uhwhite(self):
         self.setstate({"on": true, "hue": 47103, "colormode": "xy", "xy": [0.3355, 0.3595]})
+
