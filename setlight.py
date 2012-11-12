@@ -23,9 +23,9 @@ if(len(sys.argv) < 2):
 
 light = sys.argv[1]
 
-bri = sys.argv[2]
+bri = int(sys.argv[2])
 
-if(len(sys.argv) > 2):
+if(len(sys.argv) > 3):
     profile = sys.argv[3]
 
 
@@ -35,8 +35,11 @@ else:
     lights = [Light(ip, secret, light, True)]
 
 for light in lights:
-    light.on()
     if(profile):
+        light.on()
         getattr(light, profile)()
     else:
-        light.brightness(bri)
+        if(bri == 0):
+            light.off()
+        else:
+            light.brightness(bri)
