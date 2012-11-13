@@ -96,16 +96,18 @@ class DHCPMonitor:
             old = (was_online - online)
             if (new):
                 for client in new:
-                    if(self.hook['incoming'].has_key(client)):
-                        self.hook['incoming'][client](client, 'incoming', users[client], self.extra['incoming'][client])
-                    if(self.hook['incoming'].has_key('*')):
-                        self.hook['incoming']['*'](client, 'incoming', users[client], self.extra['incoming']['*'])
+                    direction = 'incoming'
+                    if(self.hook[direction].has_key(client)):
+                        self.hook[direction][client](client, direction, users[client], self.extra[direction][client])
+                    if(self.hook[direction].has_key('*')):
+                        self.hook[direction]['*'](client, direction, users[client], self.extra[direction]['*'])
             if (old):
                 for client in old:
-                    if(self.hook['outgoing'].has_key(client)):
-                        self.hook['outgoing'][client](client, 'outgoing', users[client], self.extra['outgoing'][client])
-                    if(self.hook['outgoing'].has_key('*')):
-                        self.hook['outgoing']['*'](client, 'outgoing', users[client], self.extra['outgoing']['*'])
+                    direction = 'outgoing'
+                    if(self.hook[direction].has_key(client)):
+                        self.hook[direction][client](client, direction, users[client], self.extra[direction][client])
+                    if(self.hook[direction].has_key('*')):
+                        self.hook[direction]['*'](client, direction, users[client], self.extra[direction]['*'])
 
 
             was_online = online
