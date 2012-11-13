@@ -28,15 +28,6 @@ class DHCPMonitor:
         print 'You pressed Ctrl+C!'
         sys.exit(0)
 
-    def GetInHMS(self, seconds):
-        hours = seconds / 3600
-        seconds -= 3600*hours
-        minutes = seconds / 60
-        seconds -= 60*minutes
-        if hours == 0:
-            return "%02d:%02d" % (minutes, seconds)
-        return "%02d:%02d:%02d" % (hours, minutes, seconds)
-
     def listOnline(self, users):
         online = []
         for mac in users:
@@ -86,6 +77,13 @@ class DHCPMonitor:
                 users[mac][cat] = output_dict[key]
         return users
 
+    def perform_action(self, users, group, direction):
+        for client in group:
+            if(self.hook[direction].has_key(client)):
+                self.hook[direction][client](client, direction, users[client], self.extra[direction][client])
+            if(self.hook[direction].has_key('*')):
+                self.hook[direction]['*'](client, direction, users[client], self.extra[direction]['*'])
+
     def run(self):
         online = set()
         was_online = set()
@@ -94,22 +92,8 @@ class DHCPMonitor:
             online = set(self.listOnline(users))
             new = (online - was_online)
             old = (was_online - online)
-            if (new):
-                for client in new:
-                    direction = 'incoming'
-                    if(self.hook[direction].has_key(client)):
-                        self.hook[direction][client](client, direction, users[client], self.extra[direction][client])
-                    if(self.hook[direction].has_key('*')):
-                        self.hook[direction]['*'](client, direction, users[client], self.extra[direction]['*'])
-            if (old):
-                for client in old:
-                    direction = 'outgoing'
-                    if(self.hook[direction].has_key(client)):
-                        self.hook[direction][client](client, direction, users[client], self.extra[direction][client])
-                    if(self.hook[direction].has_key('*')):
-                        self.hook[direction]['*'](client, direction, users[client], self.extra[direction]['*'])
-
-
+            self.perform_action(users, new, 'incoming')
+            self.perform_action(users, old, 'outgoing')
             was_online = online
             sleep(1)
 
