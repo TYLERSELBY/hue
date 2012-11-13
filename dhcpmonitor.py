@@ -15,9 +15,14 @@ class DHCPMonitor:
             'incoming': {},
             'outgoing': {}
         }
+        self.extra = {
+            'incoming': {},
+            'outgoing': {}
+        }
 
-    def register(self, hwaddr, event, method):
+    def register(self, hwaddr='*', event='incoming', method='print', extra = {}):
         self.hook[event][hwaddr] = method
+        self.extra[event][hwaddr] = extra
 
     def signal_handler(self, signal, frame):
         print 'You pressed Ctrl+C!'
@@ -31,6 +36,13 @@ class DHCPMonitor:
         if hours == 0:
             return "%02d:%02d" % (minutes, seconds)
         return "%02d:%02d:%02d" % (hours, minutes, seconds)
+
+    def listOnline(self, users):
+        online = []
+        for mac in users:
+            if(users[mac].has_key('wirelessTimeAssociated')):
+                online.append(mac)
+        return online
 
     def collect_snmp(self):
         command = ['/usr/bin/snmpwalk', '-m', '/usr/share/snmp/mibs/AIRPORT-BASESTATION-3-MIB.txt', '-Os', '-v', '2c', '-c', 'airport', self.ip, 'SNMPv2-SMI::enterprises.apple.airport']
@@ -74,25 +86,6 @@ class DHCPMonitor:
                 users[mac][cat] = output_dict[key]
         return users
 
-    def listOnline(self, users):
-        online = []
-        for mac in users:
-            if(users[mac].has_key('wirelessTimeAssociated')):
-                online.append(mac)
-        return online
-
-    def printOnline(self, users):
-        for mac in users:
-            if(users[mac].has_key('dhcpClientID')):
-                if(users[mac]['dhcpClientID'] == ""):
-                    print mac, ": ",
-                else:
-                    print users[mac]['dhcpClientID'], ": ",
-                if(users[mac].has_key('wirelessTimeAssociated')):
-                    print self.GetInHMS(users[mac]['wirelessTimeAssociated']), "remaining"
-                else:
-                    print "Not associated"
-
     def run(self):
         online = set()
         was_online = set()
@@ -104,15 +97,15 @@ class DHCPMonitor:
             if (new):
                 for client in new:
                     if(self.hook['incoming'].has_key(client)):
-                        self.hook['incoming'][client](client, 'incoming', users[client])
+                        self.hook['incoming'][client](client, 'incoming', users[client], self.extra['incoming'][client])
                     if(self.hook['incoming'].has_key('*')):
-                        self.hook['incoming']['*'](client, 'incoming', users[client])
+                        self.hook['incoming']['*'](client, 'incoming', users[client], self.extra['incoming']['*'])
             if (old):
                 for client in old:
                     if(self.hook['outgoing'].has_key(client)):
-                        self.hook['outgoing'][client](client, 'outgoing', users[client])
+                        self.hook['outgoing'][client](client, 'outgoing', users[client], self.extra['outgoing'][client])
                     if(self.hook['outgoing'].has_key('*')):
-                        self.hook['outgoing']['*'](client, 'outgoing', users[client])
+                        self.hook['outgoing']['*'](client, 'outgoing', users[client], self.extra['outgoing']['*'])
 
 
             was_online = online
