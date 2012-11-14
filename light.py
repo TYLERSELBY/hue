@@ -76,6 +76,10 @@ class Light:
         r = requests.get(url)
         return json.loads(r.content)['state']
 
+    def colortemp(self, i):
+        body = json.dumps({'colormode': 'ct', 'ct': i})
+        self.setstate(body)
+
     def concentrate(self):
         body = json.dumps({u'on': True, u'hue': 13122, u'colormode': u'ct', u'bri': 219, u'sat': 211, u'ct': 233})
         self.setstate(body)
