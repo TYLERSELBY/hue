@@ -38,18 +38,10 @@ if light.strip() == 'all':
 else:
     lights = [Light(ip, secret, light)]
 
-interval = float(duration)/max_bri
-
-#Don't allow internal faster than 3/second
-if ( (interval / len(lights)) < .3):
-    interval = 0.3
-
 #turn defined lights on but dark
 for light in lights:
     light.brightness(1)
     light.on()
 
-for i in range(1, max_bri):
-    for light in lights:
-        light.brightness(i)
-        sleep(interval)
+for light in lights:
+    light.setstate({'transitiontime' : duration, 'bri' : max_bri})
