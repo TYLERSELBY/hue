@@ -1,5 +1,5 @@
 [hue]
 ip = 10.0.1.11 
 secret = 
-light = all
+light = 1
 numlights = 3
