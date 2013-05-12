@@ -5,9 +5,11 @@ import json
 import ConfigParser
 import sys
 from light import Light
+from os.path import dirname, join
+
 
 config = ConfigParser.RawConfigParser()
-config.read('hue.cfg')
+config.read(join(dirname(__file__), 'hue.cfg'))
 
 ip = config.get('hue', 'ip')
 secret = config.get('hue', 'secret')
