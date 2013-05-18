@@ -17,7 +17,7 @@ numlights = int(config.get('hue', 'numlights'))
 profile = None
 
 def usage():
-    print "./setlight.py (all|light#) (full|[0-255]) [relax|reading|concentration|energize]"
+    print "./setlight.py (all|light#) (full|[0-255]) [relax|reading|concentrate|energize]"
     sys.exit(0)
 
 if(len(sys.argv) < 2):
