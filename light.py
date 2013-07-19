@@ -8,16 +8,20 @@ import os
 
 class Light:
     def __init__(self, ip=None, secret=None, lightnum=None, debug=False):
+        url = 'http://www.meethue.com/api/nupnp'
+        r = requests.get(url)
+        data = json.loads(r.content)[0]
+        if(data.has_key('internalipaddress')):
+            self.ip = data['internalipaddress']
+        else: return None
         #If a config is available, default to it
         if os.path.isfile('hue.cfg'):
             config = ConfigParser.RawConfigParser()
             config.read('hue.cfg')
-            self.ip = config.get('hue', 'ip')
             self.secret = config.get('hue', 'secret')
             self.lightnum = config.get('hue', 'light')
 
         #Fill in if parameter was set
-        if(ip): self.ip = ip
         if(secret): self.secret = secret
         if(lightnum): self.lightnum = lightnum
         self.debug = debug
@@ -105,6 +109,6 @@ class Light:
     def green(self):
         self.setstate({"on": True, "hue": 47103, "colormode": "xy", "xy": [0.3991, 0.4982]})
 
-    def uhwhite(self):
+    def white(self):
         self.setstate({"on": true, "hue": 47103, "colormode": "xy", "xy": [0.3355, 0.3595]})
 
